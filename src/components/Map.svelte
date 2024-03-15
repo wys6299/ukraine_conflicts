@@ -3,6 +3,8 @@
   import { onMount } from "svelte";
   export let index;
   export let geoJsonToFit;
+  import * as turf from "@turf/turf";
+  // import filteredData from "../data/filtered.geojson";
 
 
   mapboxgl.accessToken =
@@ -12,6 +14,7 @@
   let map;
 
   let zoomLevel;
+  let hexbinLayer;
 
   function updateZoomLevel() {
     const screenWidth = window.innerWidth;
@@ -46,7 +49,7 @@
 
       for (const layerId of labelLayerIds) {
         map.setLayoutProperty(layerId, "visibility", "none");
-      }
+      } 
     }
 
     map.on("load", () => {
@@ -55,6 +58,26 @@
       map.on("zoom", updateBounds);
       map.on("drag", updateBounds);
       map.on("move", updateBounds);
+
+      const hexbinGrid = turf.hexGrid(turf.bbox(filteredData), 0.1); // Adjust hexbin size as needed
+
+      map.addSource("hexbin", {
+        type: "geojson",
+        data: hexbinGrid,
+      });
+
+      // Add a layer for the hexbins
+      map.addLayer({
+        id: "hexbin-layer",
+        type: "fill",
+        source: "hexbin",
+        paint: {
+          "fill-color": "blue", // Adjust color as needed
+          "fill-opacity": 0.5, // Adjust opacity as needed
+        },
+      });
+
+      hexbinLayer = map.getLayer("hexbin-layer");
     });
   });
   

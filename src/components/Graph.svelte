@@ -2,7 +2,7 @@
   import { fly, draw } from "svelte/transition";
   import { tweened } from "svelte/motion";
   import { cubicOut, cubicInOut, sineIn } from "svelte/easing";
-  import { new_cities } from "../data/new_cities"
+  import { new_cities } from "../data/new_cities";
   import { loop_guard } from "svelte/internal";
   import * as d3 from 'd3';
   import Map from "./Map.svelte";
@@ -108,7 +108,7 @@
   $: UA_V = new_cities.features.filter(filter_V);
   $: UA_P = new_cities.features.filter(filter_P);
 
-  // $: svg = d3.create("svg")
+  // $: svg = d3.create(svg)
   //   .attr("viewBox", [0, 0, width, height])
   //   .attr("width", width)
   //   .attr("height", height)

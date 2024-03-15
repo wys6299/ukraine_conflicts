@@ -65,6 +65,7 @@
       >
     {#if index<1}
       <Map bind:geoJsonToFit {index}/>
+
     {/if}
     <div class="progress-bars">
       <p>current section: <strong>{index + 1}/{count}</strong></p>
@@ -83,7 +84,8 @@
       <h1>
         <strong style="color: black; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">UKRAINE CONFLICTS</strong>
       </h1>
-      <Graph {index} {width} {height} {geoJsonToFit} {projection} />
+      <!-- <Graph {index} {width} {height} {geoJsonToFit} {projection} /> -->
+      <Map bind:geoJsonToFit {index}/>
       <h2 class="blurb_head">
         The ongoing conflict in Ukraine has captured global attention since its inception. As we delve into the intricate details of this conflict, one thing becomes strikingly clear – behind every statistic lies a story of human suffering, resilience, and the relentless pursuit of peace. Join us as we unravel the layers of the Ukraine conflicts, exploring the data, events, and narratives that define this tumultuous chapter in modern history.
       </h2>
