@@ -81,8 +81,8 @@
 
       // Add a layer for the hexbins
       map.addLayer({
-        id: "crashesHexGrid",
-        type: "fill",
+        id: "hexbin-layer",
+        type: "circle",
         source: "hexbin",
         layout: {},
         paint: {
@@ -90,7 +90,7 @@
             property: 'EVENT_TYPE',
             stops: colorRamp.map((d, i) => [i, d])
           }, // Adjust color as needed
-          "fill-opacity": 0.5, // Adjust opacity as needed
+          "fill-opacity": 0.8, // Adjust opacity as needed
         },
       });
 
