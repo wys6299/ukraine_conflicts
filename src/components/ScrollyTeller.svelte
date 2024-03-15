@@ -63,10 +63,10 @@
       bind:clientWidth={width}
       bind:clientHeight={height}
       >
-    {#if index<1}
+    <!-- {#if index<1}
       <Map bind:geoJsonToFit {index}/>
 
-    {/if}
+    {/if} -->
     <div class="progress-bars">
       <p>current section: <strong>{index + 1}/{count}</strong></p>
       <progress value={count ? (index + 1) / count : 0} />

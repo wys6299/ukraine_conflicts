@@ -4,8 +4,6 @@
   export let index;
   export let geoJsonToFit;
   import * as turf from "@turf/turf";
-  // import filteredData from "../data/filtered.geojson";
-
 
   mapboxgl.accessToken =
     "pk.eyJ1Ijoid3lzNjI5OSIsImEiOiJjbGtodDNrMnIwYmxwM2dxbDU3azZlZ3JiIn0.Hb3fx_PsGtyRh38lP1Nwcg";
@@ -15,6 +13,9 @@
 
   let zoomLevel;
   let hexbinLayer;
+
+  let processed;
+  let colorRamp;
 
   function updateZoomLevel() {
     const screenWidth = window.innerWidth;
@@ -26,19 +27,7 @@
     map.setZoom(zoomLevel);
   }
 
-  onMount(() => {
-    updateZoomLevel();
-    map = new mapboxgl.Map({
-      container,
-      style: "mapbox://styles/wys6299/clt7qstej00hs01o801l17nat",
-      center: [31, 49],
-      zoom: zoomLevel,
-      attributionControl: true, // removes attribution from the bottom of the map
-    });
-
-    window.addEventListener("resize", handleResize);
-
-    function hideLabelLayers() {
+  function hideLabelLayers() {
       const labelLayerIds = map
         .getStyle()
         .layers.filter(
@@ -52,27 +41,55 @@
       } 
     }
 
-    map.on("load", () => {
-      hideLabelLayers();
-      updateBounds();
-      map.on("zoom", updateBounds);
-      map.on("drag", updateBounds);
-      map.on("move", updateBounds);
+      
+  // function updateBounds() {
+  //   const bounds = map.getBounds();
+  //   geoJsonToFit.features[0].geometry.coordinates = [
+  //     bounds._ne.lng,
+  //     bounds._ne.lat,
+  //   ];
+  //   geoJsonToFit.features[1].geometry.coordinates = [
+  //     bounds._sw.lng,
+  //     bounds._sw.lat,
+  //   ];
+  // }
 
-      const hexbinGrid = turf.hexGrid(turf.bbox(filteredData), 0.1); // Adjust hexbin size as needed
+  onMount(() => {
+    updateZoomLevel();
+    map = new mapboxgl.Map({
+      container,
+      style: "mapbox://styles/wys6299/clt7qstej00hs01o801l17nat",
+      center: [31, 49],
+      zoom: zoomLevel,
+      attributionControl: true, // removes attribution from the bottom of the map
+    });
+
+    window.addEventListener("resize", handleResize);
+
+    colorRamp = ["#fa9fb5", "#f768a1", "#dd3497", "#ae017e", "#7a0177"];
+
+    map.on("load", function() {
+      // updateBounds();
+      // map.on("zoom", updateBounds);
+      // map.on("drag", updateBounds);
+      // map.on("move", updateBounds);
 
       map.addSource("hexbin", {
         type: "geojson",
-        data: hexbinGrid,
+        data: 'https://raw.githubusercontent.com/wys6299/ukraine_conflicts/main/src/data/filtered.geojson',
       });
 
       // Add a layer for the hexbins
       map.addLayer({
-        id: "hexbin-layer",
+        id: "crashesHexGrid",
         type: "fill",
         source: "hexbin",
+        layout: {},
         paint: {
-          "fill-color": "blue", // Adjust color as needed
+          'fill-color': {
+            property: 'EVENT_TYPE',
+            stops: colorRamp.map((d, i) => [i, d])
+          }, // Adjust color as needed
           "fill-opacity": 0.5, // Adjust opacity as needed
         },
       });
@@ -80,18 +97,6 @@
       hexbinLayer = map.getLayer("hexbin-layer");
     });
   });
-  
-  function updateBounds() {
-    const bounds = map.getBounds();
-    geoJsonToFit.features[0].geometry.coordinates = [
-      bounds._ne.lng,
-      bounds._ne.lat,
-    ];
-    geoJsonToFit.features[1].geometry.coordinates = [
-      bounds._sw.lng,
-      bounds._sw.lat,
-    ];
-  }
 
   let isVisible = true;
 
@@ -109,10 +114,10 @@
 <style>
   .map {
     width: 100%;
-    height: 100vh; /* check problem when setting width */
+    height: 80vh; /* check problem when setting width */
     position: relative;
     opacity: 0;
-    visibility: hidden;
+    visibility: visible;
     transition: opacity 2s, visibility 2s;
     outline: rgb(0, 0, 0) solid 3px;
   }
