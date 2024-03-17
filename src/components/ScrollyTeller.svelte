@@ -120,7 +120,7 @@
         As we reflect on the events of the past week, one thing becomes abundantly clear – the Ukraine conflict is far from over. But amidst the despair and destruction, there remains a flicker of hope – hope for peace, hope for justice, and hope for a future where the people of Ukraine can once again live in peace and prosperity.
       </p>
 
-      <img src="tank.png" alt="Tank" style="display: block; margin: 0 auto;">
+      <img src="tank.png" alt="Tank" style="display: block; margin: 0 auto; max-width: 2000px;" align="left">
     </section>
 
     <section class='graph'>
@@ -132,28 +132,24 @@
       </div>
       <br>
       <Graph2 {data} />
-      <div style="margin: 0 auto; max-width: 1000px;">
-        <div style="margin: 0 auto; max-width: auto;">
-          <h4 style="text-align:left;">Investigation Summary: Understanding the Decline in Conflict</h4>
-          <p class='blurb'>
-            Our investigation delves into the dataset of conflicts worldwide since World War II, with a particular focus on the ongoing Ukraine conflict. Through extensive research, we have analyzed historical data, scholarly articles, and reports to uncover trends and patterns in global conflicts.
-            We have identified a significant decrease in conflicts since the end of World War II, reflecting changes in geopolitical dynamics, international diplomacy, and advancements in peacekeeping efforts.
-            Despite this overall decline, the Ukraine conflict remains a pertinent topic of investigation, drawing attention to persisting tensions and challenges in the region.
-          </p>
-          <br>
-          <p class='blurb'>
-            Our investigation presents several challenges, including the integration of interactive features to enhance user engagement and understanding. We anticipate that visualizing the data effectively, particularly regarding the Ukraine conflict, will require careful consideration of layout, functionality, and storytelling techniques.
-            Addressing these challenges will involve meticulous attention to detail and experimentation with various visualization methods to ensure a comprehensive and informative exploration of the dataset.
-          </p>
-        </div>
-        <br>
-      </div>
+      <h4 style="text-align:left; font-size: 30px;">Investigation Summary: Understanding the Decline in Conflict</h4>
+      <p class='blurb'>
+        Our investigation delves into the dataset of conflicts worldwide since World War II, with a particular focus on the ongoing Ukraine conflict. Through extensive research, we have analyzed historical data, scholarly articles, and reports to uncover trends and patterns in global conflicts.
+        We have identified a significant decrease in conflicts since the end of World War II, reflecting changes in geopolitical dynamics, international diplomacy, and advancements in peacekeeping efforts.
+        Despite this overall decline, the Ukraine conflict remains a pertinent topic of investigation, drawing attention to persisting tensions and challenges in the region.
+      </p>
+      <br>
+      <p class='blurb'>
+        Our investigation presents several challenges, including the integration of interactive features to enhance user engagement and understanding. We anticipate that visualizing the data effectively, particularly regarding the Ukraine conflict, will require careful consideration of layout, functionality, and storytelling techniques.
+        Addressing these challenges will involve meticulous attention to detail and experimentation with various visualization methods to ensure a comprehensive and informative exploration of the dataset.
+      </p>
+      <br>
     </section>
 
     <section class='graph'>
       <h3 style='text-align:left;'class='subheading'>Takeaway</h3>
-      <div style="margin: 0 auto; max-width: 1000px;">
-        <div style="margin: 0 auto; max-width: auto;">
+      <div style="margin: 0 auto;">
+        <div style="margin: 0 auto;">
           <p class='blurb'>
             The key takeaway from our project is the importance of effectively visualizing complex datasets to understand the severity and trends of conflicts in specific locations over time. By utilizing a map to pinpoint areas of heightened conflict and a time flow circle chart to illustrate the fluctuations in conflict numbers, we aim to provide insight into the dynamics of these conflicts.
           </p>
@@ -176,6 +172,7 @@
       width: 100%;
       height: 100vh;
       position: relative;
+      max-width: 2000px;
   }
 
   .foreground {
@@ -184,6 +181,7 @@
       margin: 0 auto;
       height: auto;
       position: relative;
+      max-width: 2000px;
   }
 
   .progress-bars {
@@ -216,7 +214,7 @@
     font-size: 30px; 
     font-weight: 800; 
     line-height: 72px; 
-    margin: 0 0 24px; 
+    margin: 10 10 10px; 
     text-align: left; 
     text-transform: uppercase;
   }
@@ -224,23 +222,23 @@
   .blurb {
       font-family: 'Nunito', sans-serif;
       text-align: left;
-      font-size: 18px;
+      font-size: 23px;
       font-weight: 300;
       line-height: 1.5;
       padding: 0 20px; /* Add some padding to the sides for better readability */
-      margin: 0 auto; 
-      max-width: 1000px;
+      margin: 10 auto; 
+      max-width: 2000px;
   }
 
   .blurb_head{
     font-family: 'Nunito', sans-serif;
     text-align: left;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 300;
     line-height: 1.5;
     padding: 0 20px; /* Add some padding to the sides for better readability */
     margin: 0 auto; 
-    max-width: 1000px;
+    max-width: 2000px;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 25px;
   }

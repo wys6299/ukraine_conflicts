@@ -1,105 +1,128 @@
 <script>
   import mapboxgl from "mapbox-gl";
   import { onMount } from "svelte";
-  export let index;
-  export let geoJsonToFit;
-  import * as turf from "@turf/turf";
 
   mapboxgl.accessToken =
     "pk.eyJ1Ijoid3lzNjI5OSIsImEiOiJjbGtodDNrMnIwYmxwM2dxbDU3azZlZ3JiIn0.Hb3fx_PsGtyRh38lP1Nwcg";
 
   let container;
   let map;
-
-  let zoomLevel;
-  let hexbinLayer;
-
+  let hexbinLayers = {}; // Object to hold layers for each EVENT_TYPE
   let processed;
-  let colorRamp;
+  let colorRamp = ["red", "blue", "orange", "green", "purple"];
 
   function updateZoomLevel() {
     const screenWidth = window.innerWidth;
-    zoomLevel = screenWidth <= 600 ? 4 : 5.7; // Adjust these values as needed
+    return screenWidth <= 600 ? 4 : 5.7; // Adjust these values as needed
   }
 
   function handleResize() {
-    updateZoomLevel();
-    map.setZoom(zoomLevel);
+    map.setZoom(updateZoomLevel());
   }
 
-  function hideLabelLayers() {
-      const labelLayerIds = map
-        .getStyle()
-        .layers.filter(
-          (layer) =>
-            layer.type === "symbol" && /label|text|place/.test(layer.id)
-        )
-        .map((layer) => layer.id);
-
-      for (const layerId of labelLayerIds) {
-        map.setLayoutProperty(layerId, "visibility", "none");
-      } 
-    }
-
-      
-  // function updateBounds() {
-  //   const bounds = map.getBounds();
-  //   geoJsonToFit.features[0].geometry.coordinates = [
-  //     bounds._ne.lng,
-  //     bounds._ne.lat,
-  //   ];
-  //   geoJsonToFit.features[1].geometry.coordinates = [
-  //     bounds._sw.lng,
-  //     bounds._sw.lat,
-  //   ];
-  // }
-
   onMount(() => {
-    updateZoomLevel();
     map = new mapboxgl.Map({
       container,
       style: "mapbox://styles/wys6299/clt7qstej00hs01o801l17nat",
       center: [31, 49],
-      zoom: zoomLevel,
-      attributionControl: true, // removes attribution from the bottom of the map
+      zoom: updateZoomLevel(),
+      attributionControl: true,
     });
 
     window.addEventListener("resize", handleResize);
 
-    colorRamp = ["#fa9fb5", "#f768a1", "#dd3497", "#ae017e", "#7a0177"];
+    map.on("load", function () {
+      processed = fetch(
+        "https://raw.githubusercontent.com/wys6299/ukraine_conflicts/main/src/data/filtered.geojson"
+      )
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          }
+          throw new Error("Problem loading processed data!");
+        })
+        .then((data) => {
+          const eventTypes = new Set(
+            data.features.map((feature) => feature.properties.EVENT_TYPE)
+          );
 
-    map.on("load", function() {
-      // updateBounds();
-      // map.on("zoom", updateBounds);
-      // map.on("drag", updateBounds);
-      // map.on("move", updateBounds);
+          // Create a layer for each EVENT_TYPE
+          for (const [index, eventType] of [...eventTypes].entries()) {
+            const filteredFeatures = data.features.filter(
+              (feature) => feature.properties.EVENT_TYPE === eventType
+            );
 
-      map.addSource("hexbin", {
-        type: "geojson",
-        data: 'https://raw.githubusercontent.com/wys6299/ukraine_conflicts/main/src/data/filtered.geojson',
+            // Add a source for this EVENT_TYPE
+            map.addSource(`${eventType}-source`, {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: filteredFeatures,
+              },
+            });
+
+            // Add a layer for this EVENT_TYPE
+            map.addLayer({
+              id: `${eventType}-layer`,
+              type: "circle",
+              source: `${eventType}-source`,
+              paint: {
+                "circle-color": colorRamp[index], // Use a unique color for each layer
+                "circle-radius": 6,
+              },
+            });
+
+            // Store the layer reference in the hexbinLayers object
+            hexbinLayers[eventType] = map.getLayer(`${eventType}-layer`);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching or processing data:", error);
+        });
+
+      // Add a popup when hovering over the features
+      map.on("mousemove", "circle", function (e) {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const properties = e.features[0].properties;
+        
+        // Ensure that if the map is zoomed out such that multiple copies of the feature are visible,
+        // the popup appears over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        }
+
+        new mapboxgl.Popup()
+          .setLngLat(coordinates)
+          .setHTML(
+            `<h3>${properties.EVENT_TYPE}</h3><p>${JSON.stringify(properties)}</p>`
+          )
+          .addTo(map);
       });
 
-      // Add a layer for the hexbins
-      map.addLayer({
-        id: "hexbin-layer",
-        type: "circle",
-        source: "hexbin",
-        layout: {},
-        paint: {
-          'fill-color': {
-            property: 'EVENT_TYPE',
-            stops: colorRamp.map((d, i) => [i, d])
-          }, // Adjust color as needed
-          "fill-opacity": 0.8, // Adjust opacity as needed
-        },
+      // Remove the popup when the mouse leaves the feature
+      map.on("mouseleave", "circle", function () {
+        map.getCanvas().style.cursor = "";
+        map.closePopup();
       });
-
-      hexbinLayer = map.getLayer("hexbin-layer");
     });
   });
 
   let isVisible = true;
 
+  function toggleLayerVisibility(eventType) {
+    const currentVisibility = map.getLayoutProperty(
+      `${eventType}-layer`,
+      "visibility"
+    );
+
+    const newVisibility = currentVisibility === "visible" ? "none" : "visible";
+
+    map.setLayoutProperty(
+      `${eventType}-layer`,
+      "visibility",
+      newVisibility
+    );
+}
 </script>
 
 <svelte:head>
@@ -110,21 +133,54 @@
 </svelte:head>
 
 <div class="map" class:visible={isVisible} bind:this={container} />
+<div class="toggle-button-container">
+  {#each Object.keys(hexbinLayers) as eventType, index}
+    <button
+      class="toggle-button"
+      on:click={() => toggleLayerVisibility(eventType)}
+    >
+      {eventType}
+      <span class="color-dot" style="background-color: {colorRamp[index]}"></span>
+    </button>
+  {/each}
+</div>
 
 <style>
   .map {
     width: 100%;
-    height: 80vh; /* check problem when setting width */
+    height: 80vh;
     position: relative;
     opacity: 0;
     visibility: visible;
     transition: opacity 2s, visibility 2s;
     outline: rgb(0, 0, 0) solid 3px;
+    max-width: 2000px;
   }
 
   .map.visible {
     opacity: 1;
     visibility: visible;
   }
-</style>
 
+  .toggle-button {
+    margin-bottom: 15px; /* Increase bottom margin for more spacing between buttons */
+    padding: 10px 20px; /* Increase padding to make the buttons larger */
+    font-size: 16px; /* Increase font size for better readability */
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .toggle-button:hover {
+    background-color: #f0f0f0;
+  }
+
+  .color-dot {
+    display: inline-block;
+    width: 12px; /* Adjust the size of the color dots accordingly */
+    height: 12px;
+    border-radius: 50%;
+    margin-left: 10px; /* Increase left margin for more space between text and dot */
+  }
+</style>
