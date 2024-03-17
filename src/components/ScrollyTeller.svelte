@@ -57,33 +57,15 @@
   bind:offset
   bind:progress
 >
-  <div 
-      class="background"
-      slot="background"
-      bind:clientWidth={width}
-      bind:clientHeight={height}
-      >
-    <!-- {#if index<1}
-      <Map bind:geoJsonToFit {index}/>
-
-    {/if} -->
-    <div class="progress-bars">
-      <p>current section: <strong>{index + 1}/{count}</strong></p>
-      <progress value={count ? (index + 1) / count : 0} />
-
-      <p>offset in current section</p>
-      <progress value={offset || 0} />
-
-      <p>total progress</p>
-      <progress value={progress || 0} />
-    </div>
-  </div>
 
   <div class="foreground" slot="foreground">
     <section class='graph'>
       <h1>
-        <strong style="color: black; font-family: 'Raleway',sans-serif; font-size: 62px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">UKRAINE CONFLICTS</strong>
+        <strong style="color: black; font-family: 'Raleway',sans-serif; font-size: 32px; font-weight: 800; line-height: 72px; margin: 0 0 24px; text-align: center; text-transform: uppercase;">Ukraine Conflicts in an ongoing pace</strong>
       </h1>
+      <p class='blurb'>
+        In the shadows of geopolitics, amidst the clash of arms and the cries of the innocent, Ukraine stands as a beacon of resilience. As the world watches, the conflict unfolds, revealing stories of courage, loss, and the enduring quest for peace. Join us as we journey into the heart of this tumultuous saga, where every statistic bears witness to the human drama playing out on Ukraine's stage.
+      </p>
       <!-- <Graph {index} {width} {height} {geoJsonToFit} {projection} /> -->
       <Map bind:geoJsonToFit {index}/>
       <h2 class="blurb_head">
@@ -120,68 +102,105 @@
         As we reflect on the events of the past week, one thing becomes abundantly clear – the Ukraine conflict is far from over. But amidst the despair and destruction, there remains a flicker of hope – hope for peace, hope for justice, and hope for a future where the people of Ukraine can once again live in peace and prosperity.
       </p>
 
-      <img src="tank.png" alt="Tank" style="display: block; margin: 0 auto; max-width: 2000px;" align="left">
+      <img src="tank.png" alt="Tank" style="display: block; margin: 0 auto; max-width: 950px;" align="left">
     </section>
 
-    <section class='graph'>
+    <section class="conflict-categories">
+      <h2>Conflict Categories</h2>
+  
+      <div class="category">
+          <h3>Explosions/Remote Violence:</h3>
+          <p class="blurb">
+              The majority of the conflict incidents in Ukraine are characterized by explosions and remote violence. This category encompasses a wide range of events including bombings, shelling, and attacks carried out through remote means such as drones or artillery. These acts of violence often result in widespread destruction and casualties, contributing significantly to the overall destabilization of the region.
+          </p>
+      </div>
+  
+      <div class="category">
+          <h3>Battles and Strategic Developments:</h3>
+          <p class="blurb">
+              The conflict in eastern Ukraine, particularly in regions close to the Russian border, is marked by battles and strategic developments. This includes confrontations between Ukrainian and Russian-backed forces, as well as strategic maneuvers aimed at gaining control over key territories. The focus on strategic developments underscores the geopolitical significance of the region and the ongoing struggle for influence.
+          </p>
+      </div>
+  
+      <div class="category">
+          <h3>Violence Against Civilians:</h3>
+          <p class="blurb">
+              Instances of violence against civilians constitute another significant aspect of the conflict. Civilians in Ukraine, especially those living in areas directly affected by the fighting, face the constant threat of harm from shelling, airstrikes, and other forms of targeted violence. This category highlights the tragic toll exacted on innocent lives amidst the turmoil of war.
+          </p>
+      </div>
+  
+      <div class="category">
+          <h3>Protests:</h3>
+          <p class="blurb">
+              In addition to armed conflict, protests also play a role in the dynamics of the Ukrainian crisis. Major cities across Ukraine have been sites of demonstrations, where citizens voice their grievances and demand political change. These protests serve as a reflection of public discontent and a means of advocating for social and political reforms amidst the backdrop of ongoing conflict.
+          </p>
+      </div>
+  </section>
+
+    <section class='graph2'>
       <h3 style='text-align:left;' class='subheading'>Investigating Decrease in Conflicts Since World War II</h3>
       <div style="margin: 0 auto; max-width: 950px;">
         <p style="text-align:left; font-size:23px; line-height:100%">
           Worldwide Conflict Trends
         </p>
       </div>
-      <br>
-      <Graph2 {data} />
-      <h4 style="text-align:left; font-size: 30px;">Investigation Summary: Understanding the Decline in Conflict</h4>
-      <p class='blurb'>
-        Our investigation delves into the dataset of conflicts worldwide since World War II, with a particular focus on the ongoing Ukraine conflict. Through extensive research, we have analyzed historical data, scholarly articles, and reports to uncover trends and patterns in global conflicts.
-        We have identified a significant decrease in conflicts since the end of World War II, reflecting changes in geopolitical dynamics, international diplomacy, and advancements in peacekeeping efforts.
-        Despite this overall decline, the Ukraine conflict remains a pertinent topic of investigation, drawing attention to persisting tensions and challenges in the region.
-      </p>
-      <br>
-      <p class='blurb'>
-        Our investigation presents several challenges, including the integration of interactive features to enhance user engagement and understanding. We anticipate that visualizing the data effectively, particularly regarding the Ukraine conflict, will require careful consideration of layout, functionality, and storytelling techniques.
-        Addressing these challenges will involve meticulous attention to detail and experimentation with various visualization methods to ensure a comprehensive and informative exploration of the dataset.
-      </p>
-      <br>
+        <br>
+        <Graph2 {data} />
+      <div>
+        <h4 style="text-align:left; font-size: 30px;">Investigation Summary: Understanding the Decline in Conflict</h4>
+        <p class='blurb'>
+          Our investigation delves into the dataset of conflicts worldwide since World War II, with a particular focus on the ongoing Ukraine conflict. Through extensive research, we have analyzed historical data, scholarly articles, and reports to uncover trends and patterns in global conflicts.
+          We have identified a significant decrease in conflicts since the end of World War II, reflecting changes in geopolitical dynamics, international diplomacy, and advancements in peacekeeping efforts.
+          Despite this overall decline, the Ukraine conflict remains a pertinent topic of investigation, drawing attention to persisting tensions and challenges in the region.
+        </p>
+        <br>
+        <p class='blurb'>
+          Our investigation presents several challenges, including the integration of interactive features to enhance user engagement and understanding. We anticipate that visualizing the data effectively, particularly regarding the Ukraine conflict, will require careful consideration of layout, functionality, and storytelling techniques.
+          Addressing these challenges will involve meticulous attention to detail and experimentation with various visualization methods to ensure a comprehensive and informative exploration of the dataset.
+        </p>
+        <br>
+      </div>
     </section>
 
-    <section class='graph'>
+    <section class="story">
       <h3 style='text-align:left;'class='subheading'>Takeaway</h3>
-      <div style="margin: 0 auto;">
-        <div style="margin: 0 auto;">
-          <p class='blurb'>
-            The key takeaway from our project is the importance of effectively visualizing complex datasets to understand the severity and trends of conflicts in specific locations over time. By utilizing a map to pinpoint areas of heightened conflict and a time flow circle chart to illustrate the fluctuations in conflict numbers, we aim to provide insight into the dynamics of these conflicts.
-          </p>
-          <br>
-          <p class='blurb'>
-            Our project emphasizes the challenges and complexities involved in importing and presenting data accurately. We encountered difficulties in handling datasets and implementing visualization functions, particularly with the flexibility of D3.js. Despite encountering errors and spending significant time troubleshooting, we ultimately succeeded in creating visualizations that convey the intended message.
-          </p>
-          <br>
-          <p class='blurb'>
-            However, we acknowledge that the complexity of the layout and functionality may present obstacles in the learning process. It requires a deep understanding of the momentum and algorithms behind each visualization function to ensure accurate representation. Despite these challenges, our project demonstrates the importance of perseverance and adaptability in navigating through complex data visualization tasks.
-          </p>
-        </div>
+      <div style="margin: 0 auto; max-width: 950px;">
+        <p class='blurb'>
+          The key takeaway from our project is the importance of effectively visualizing complex datasets to understand the severity and trends of conflicts in specific locations over time. By utilizing a map to pinpoint areas of heightened conflict and a time flow circle chart to illustrate the fluctuations in conflict numbers, we aim to provide insight into the dynamics of these conflicts.
+        </p>
+        <br>
+        <p class='blurb'>
+          Our project emphasizes the challenges and complexities involved in importing and presenting data accurately. We encountered difficulties in handling datasets and implementing visualization functions, particularly with the flexibility of D3.js. Despite encountering errors and spending significant time troubleshooting, we ultimately succeeded in creating visualizations that convey the intended message.
+        </p>
+        <br>
+        <p class='blurb'>
+          However, we acknowledge that the complexity of the layout and functionality may present obstacles in the learning process. It requires a deep understanding of the momentum and algorithms behind each visualization function to ensure accurate representation. Despite these challenges, our project demonstrates the importance of perseverance and adaptability in navigating through complex data visualization tasks.
+        </p>
+        <br>
       </div>
     </section>
   </div>
 </Scroller>
 
 <style>
+  html {
+    zoom: 80%;
+  }
+
   .background {
       width: 100%;
-      height: 100vh;
+      height: auto;
       position: relative;
-      max-width: 2000px;
+      max-width: 950px;
   }
 
   .foreground {
       width: 100%;
       opacity: 1;
-      margin: 0 auto;
+      margin: 10 0 auto;
       height: auto;
       position: relative;
-      max-width: 2000px;
+      max-width: 950px;
   }
 
   .progress-bars {
@@ -191,54 +210,58 @@
   }
 
   section {
-      height: 700vh;
+      height: 80vh;
       background-color: rgba(255, 255, 255, 0); /* 20% opaque */
       border-radius: 25px;
       text-align: center;
       color: rgb(0, 0, 0);
       padding: 1em;
-      margin: 0 0 2em 0;
+      margin: 10 0 auto;
   }
 
   .story{
-    height: 110vh;
+    height: 100vh;
   }
 
   .graph {
-      height: 100vh;
+    height: 100vh;
+  }
+
+  .graph2 {
+    height: 125vh;
   }
 
   .subheading {
     color: black; 
     font-family: 'Raleway',sans-serif; 
-    font-size: 30px; 
+    font-size: 25px; 
     font-weight: 800; 
     line-height: 72px; 
-    margin: 10 10 10px; 
+    margin: 10 0 auto; 
     text-align: left; 
     text-transform: uppercase;
   }
 
   .blurb {
-      font-family: 'Nunito', sans-serif;
-      text-align: left;
-      font-size: 23px;
-      font-weight: 300;
-      line-height: 1.5;
-      padding: 0 20px; /* Add some padding to the sides for better readability */
-      margin: 10 auto; 
-      max-width: 2000px;
+    font-family: 'Nunito', sans-serif;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5;
+    padding: 0 0 20px; /* Add some padding to the sides for better readability */
+    margin: 10 0 auto; 
+    max-width: 950px;
   }
 
   .blurb_head{
     font-family: 'Nunito', sans-serif;
     text-align: left;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 300;
     line-height: 1.5;
     padding: 0 20px; /* Add some padding to the sides for better readability */
-    margin: 0 auto; 
-    max-width: 2000px;
+    margin: 10 0 auto; 
+    max-width: 950px;
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: 25px;
   }

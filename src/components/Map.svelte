@@ -13,7 +13,7 @@
 
   function updateZoomLevel() {
     const screenWidth = window.innerWidth;
-    return screenWidth <= 600 ? 4 : 5.7; // Adjust these values as needed
+    return screenWidth <= 600 ? 5 : 5.1; // Adjust these values as needed
   }
 
   function handleResize() {
@@ -24,12 +24,17 @@
     map = new mapboxgl.Map({
       container,
       style: "mapbox://styles/wys6299/clt7qstej00hs01o801l17nat",
-      center: [31, 49],
+      center: [31, 48.5],
       zoom: updateZoomLevel(),
       attributionControl: true,
     });
 
     window.addEventListener("resize", handleResize);
+
+    const popup = new mapboxgl.Popup({
+      closeButton: false,
+      closeOnClick: false
+    });
 
     map.on("load", function () {
       processed = fetch(
@@ -82,27 +87,26 @@
 
       // Add a popup when hovering over the features
       map.on("mousemove", "circle", function (e) {
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const properties = e.features[0].properties;
-        
-        // Ensure that if the map is zoomed out such that multiple copies of the feature are visible,
-        // the popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
+        if (e.features.length > 0) {
+          const properties = e.features[0].properties;
 
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(
-            `<h3>${properties.EVENT_TYPE}</h3><p>${JSON.stringify(properties)}</p>`
-          )
-          .addTo(map);
+            popup
+            .setLngLat(e.lngLat)
+            .setText(
+              `<h3>${properties.EVENT_TYPE}</h3>
+              <p>Date: ${properties.EVENT_DATE}</p>
+              <p>Type: ${properties.DISORDER_TYPE}</p>
+              <p>Location: ${properties.LOCATION}</p>
+              <p>Notes: ${properties.NOTES}</p>
+              <p>Fatalities: ${properties.FATALITIES}</p>`
+            )
+            .addTo(map);
+        }
       });
 
       // Remove the popup when the mouse leaves the feature
       map.on("mouseleave", "circle", function () {
-        map.getCanvas().style.cursor = "";
-        map.closePopup();
+        popup.remove();
       });
     });
   });
@@ -148,13 +152,13 @@
 <style>
   .map {
     width: 100%;
-    height: 80vh;
+    height: 60vh;
     position: relative;
     opacity: 0;
     visibility: visible;
     transition: opacity 2s, visibility 2s;
     outline: rgb(0, 0, 0) solid 3px;
-    max-width: 2000px;
+    max-width: 950px;
   }
 
   .map.visible {
@@ -165,7 +169,7 @@
   .toggle-button {
     margin-bottom: 15px; /* Increase bottom margin for more spacing between buttons */
     padding: 10px 20px; /* Increase padding to make the buttons larger */
-    font-size: 16px; /* Increase font size for better readability */
+    font-size: 12px; /* Increase font size for better readability */
     background-color: #ffffff;
     border: 1px solid #cccccc;
     border-radius: 5px;
